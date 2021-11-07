@@ -9,9 +9,13 @@ import { Person } from "shared/models/person"
 import { useApi } from "shared/hooks/use-api"
 import { StudentListTile } from "staff-app/components/student-list-tile/student-list-tile.component"
 import { ActiveRollOverlay, ActiveRollAction } from "staff-app/components/active-roll-overlay/active-roll-overlay.component"
+import { useStaffContext } from "staff-app/context/state-context"
+import { getSortedStudents } from "staff-app/utils/getSortedStudents"
+import { Sort } from "staff-app/components/sort/sort.component"
 
 export const HomeBoardPage: React.FC = () => {
   const [isRollMode, setIsRollMode] = useState(false)
+  const { state, dispatch } = useStaffContext()
   const [getStudents, data, loadState] = useApi<{ students: Person[] }>({ url: "get-homeboard-students" })
 
   useEffect(() => {
@@ -30,6 +34,8 @@ export const HomeBoardPage: React.FC = () => {
     }
   }
 
+  const sortedStudents = data && getSortedStudents(data?.students, state)
+
   return (
     <>
       <S.PageContainer>
@@ -43,7 +49,7 @@ export const HomeBoardPage: React.FC = () => {
 
         {loadState === "loaded" && data?.students && (
           <>
-            {data.students.map((s) => (
+            {sortedStudents.map((s: any) => (
               <StudentListTile key={s.id} isRollMode={isRollMode} student={s} />
             ))}
           </>
@@ -68,7 +74,7 @@ const Toolbar: React.FC<ToolbarProps> = (props) => {
   const { onItemClick } = props
   return (
     <S.ToolbarContainer>
-      <div onClick={() => onItemClick("sort")}>First Name</div>
+      <Sort />
       <div>Search</div>
       <S.Button onClick={() => onItemClick("roll")}>Start Roll</S.Button>
     </S.ToolbarContainer>
