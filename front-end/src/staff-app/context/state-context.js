@@ -3,12 +3,16 @@ import { stateReducer } from "staff-app/reducer/state-reducer"
 
 // Initial State Values
 const initialState = {
+  isRollMode: false,
   searchedString: "",
   sort: {
     applied: false,
     firstName: false,
     ascending: false,
-  }
+  },
+  rollStateList: [{ type: "all" }, { type: "present" }, { type: "late" }, { type: "absent" }],
+  updatedStudentRolls: [],
+  filterType: "all",
 }
 
 // State Context

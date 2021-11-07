@@ -8,79 +8,57 @@ import { CenteredContainer } from "shared/components/centered-container/centered
 import { Person } from "shared/models/person"
 import { useApi } from "shared/hooks/use-api"
 import { StudentListTile } from "staff-app/components/student-list-tile/student-list-tile.component"
-import { ActiveRollOverlay, ActiveRollAction } from "staff-app/components/active-roll-overlay/active-roll-overlay.component"
+import { ActiveRollOverlay } from "staff-app/components/active-roll-overlay/active-roll-overlay.component"
 import { useStaffContext } from "staff-app/context/state-context"
-import { getSortedStudents, getSearchedStudents } from "staff-app/utils"
-import { Sort } from "staff-app/components/sort/sort.component"
-import { Search } from "staff-app/components/search/search.component"
+import { getSortedStudents, getSearchedStudents, getFilteredStudents } from "staff-app/utils"
+import { Toolbar } from "../components/toolbar/toolbar"
 
 export const HomeBoardPage: React.FC = () => {
-  const [isRollMode, setIsRollMode] = useState(false)
   const { state, dispatch } = useStaffContext()
-  const [getStudents, data, loadState] = useApi<{ students: Person[] }>({ url: "get-homeboard-students" })
+  const [getStudents, data, studentsDataLoading] = useApi<{ students: Person[] }>({ url: "get-homeboard-students" })
 
   useEffect(() => {
     void getStudents()
   }, [getStudents])
 
-  const onToolbarAction = (action: ToolbarAction) => {
-    if (action === "roll") {
-      setIsRollMode(true)
-    }
-  }
+  useEffect(() => {
+    studentsDataLoading === "loaded" && dispatch({ type: "UPDATE_STUDENT_WITHOUT_ROLE", payload: data?.students })
+  }, [studentsDataLoading, dispatch, data])
 
-  const onActiveRollAction = (action: ActiveRollAction) => {
-    if (action === "exit") {
-      setIsRollMode(false)
-    }
-  }
-
+  
   const sortedStudents = data && getSortedStudents(data?.students, state)
   const searchedStudents = sortedStudents && getSearchedStudents(sortedStudents, state.searchedString)
+  const filteredStudents = searchedStudents && getFilteredStudents(searchedStudents, state)
+  console.log(filteredStudents, "aya")
 
 
   return (
     <>
       <S.PageContainer>
-        <Toolbar onItemClick={onToolbarAction} />
+        <Toolbar />
 
-        {loadState === "loading" && (
+        {studentsDataLoading === "loading" && (
           <CenteredContainer>
             <FontAwesomeIcon icon="spinner" size="2x" spin />
           </CenteredContainer>
         )}
 
-        {loadState === "loaded" && data?.students && (
+        {studentsDataLoading === "loaded" && data?.students && (
           <>
-            {searchedStudents.map((s: any) => (
-              <StudentListTile key={s.id} isRollMode={isRollMode} student={s} />
+            {filteredStudents.map((s: any) => (
+              <StudentListTile key={s.id} student={s} />
             ))}
           </>
         )}
 
-        {loadState === "error" && (
+        {studentsDataLoading === "error" && (
           <CenteredContainer>
             <div>Failed to load</div>
           </CenteredContainer>
         )}
       </S.PageContainer>
-      <ActiveRollOverlay isActive={isRollMode} onItemClick={onActiveRollAction} />
+      <ActiveRollOverlay />
     </>
-  )
-}
-
-type ToolbarAction = "roll" | "sort"
-interface ToolbarProps {
-  onItemClick: (action: ToolbarAction, value?: string) => void
-}
-const Toolbar: React.FC<ToolbarProps> = (props) => {
-  const { onItemClick } = props
-  return (
-    <S.ToolbarContainer>
-      <Sort />
-      <Search />
-      <S.Button onClick={() => onItemClick("roll")}>Start Roll</S.Button>
-    </S.ToolbarContainer>
   )
 }
 
