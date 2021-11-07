@@ -3,6 +3,7 @@ import { stateReducer } from "staff-app/reducer/state-reducer"
 
 // Initial State Values
 const initialState = {
+  searchedString: "",
   sort: {
     applied: false,
     firstName: false,

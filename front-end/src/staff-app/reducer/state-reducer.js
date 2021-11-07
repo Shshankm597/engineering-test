@@ -1,7 +1,7 @@
 export const stateReducer = (state, action) => {
   switch (action.type) {
 
-    case "TOGGLE_USERS_SWITCH":
+    case "TOGGLE_SORT_USERS_SWITCH":
       return {
         ...state,
         sort: { ...state.sort, applied: !state.sort.applied },
@@ -18,6 +18,12 @@ export const stateReducer = (state, action) => {
         ...state,
         sort: { ...state.sort, ascending: !state.sort.ascending },
       }
+
+      case "SEARCH_USERS":
+        return {
+          ...state,
+          searchedString: action.payload,
+        }
 
     default:
       return state

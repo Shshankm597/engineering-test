@@ -10,8 +10,9 @@ import { useApi } from "shared/hooks/use-api"
 import { StudentListTile } from "staff-app/components/student-list-tile/student-list-tile.component"
 import { ActiveRollOverlay, ActiveRollAction } from "staff-app/components/active-roll-overlay/active-roll-overlay.component"
 import { useStaffContext } from "staff-app/context/state-context"
-import { getSortedStudents } from "staff-app/utils/getSortedStudents"
+import { getSortedStudents, getSearchedStudents } from "staff-app/utils"
 import { Sort } from "staff-app/components/sort/sort.component"
+import { Search } from "staff-app/components/search/search.component"
 
 export const HomeBoardPage: React.FC = () => {
   const [isRollMode, setIsRollMode] = useState(false)
@@ -35,6 +36,8 @@ export const HomeBoardPage: React.FC = () => {
   }
 
   const sortedStudents = data && getSortedStudents(data?.students, state)
+  const searchedStudents = sortedStudents && getSearchedStudents(sortedStudents, state.searchedString)
+
 
   return (
     <>
@@ -49,7 +52,7 @@ export const HomeBoardPage: React.FC = () => {
 
         {loadState === "loaded" && data?.students && (
           <>
-            {sortedStudents.map((s: any) => (
+            {searchedStudents.map((s: any) => (
               <StudentListTile key={s.id} isRollMode={isRollMode} student={s} />
             ))}
           </>
@@ -75,7 +78,7 @@ const Toolbar: React.FC<ToolbarProps> = (props) => {
   return (
     <S.ToolbarContainer>
       <Sort />
-      <div>Search</div>
+      <Search />
       <S.Button onClick={() => onItemClick("roll")}>Start Roll</S.Button>
     </S.ToolbarContainer>
   )

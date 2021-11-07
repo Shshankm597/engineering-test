@@ -18,8 +18,8 @@ export const Sort = () => {
     <S.SortContainer>
       <FormControlLabel
         style={{ marginLeft: 0 }}
-        control={<Switch checked={applied} onChange={() => dispatch({ type: "TOGGLE_USERS_SWITCH" })} name="Sort By User Name Filter" />}
-        label="Sort By User Name Filter"
+        control={<Switch checked={applied} onChange={() => dispatch({ type: "TOGGLE_SORT_USERS_SWITCH" })} name="Sort By User Name Filter" />}
+        label="Sort by User"
         labelPlacement="start"
       />
       {applied && (
