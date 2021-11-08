@@ -1,6 +1,6 @@
 export const getSortedStudents = (studentsData, appState) => {
     const { sort } = appState
-  
+
     let sortedStudents
     let key
     let nameOne

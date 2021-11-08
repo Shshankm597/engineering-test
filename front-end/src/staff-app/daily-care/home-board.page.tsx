@@ -26,9 +26,9 @@ export const HomeBoardPage: React.FC = () => {
   }, [studentsDataLoading, dispatch, data])
 
   
-  const sortedStudents = data && getSortedStudents(data?.students, state)
-  const searchedStudents = sortedStudents && getSearchedStudents(sortedStudents, state.searchedString)
-  const filteredStudents = searchedStudents && getFilteredStudents(searchedStudents, state)
+  const sortedStudents = data && getSortedStudents(state.updatedStudentRolls, state);
+  const searchedStudents = sortedStudents && getSearchedStudents(sortedStudents, state.searchedString);
+  const filteredStudents = searchedStudents && getFilteredStudents(searchedStudents, state);
   console.log(filteredStudents, "aya")
 
 

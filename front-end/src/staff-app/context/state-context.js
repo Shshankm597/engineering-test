@@ -22,6 +22,7 @@ const StaffContext = createContext()
 export const StaffProvider = ({ children }) => {
   const [state, dispatch] = useReducer(stateReducer, initialState)
 
+  console.log(state, "state from context")
   return <StaffContext.Provider value={{ state, dispatch }}>{children}</StaffContext.Provider>
 }
 

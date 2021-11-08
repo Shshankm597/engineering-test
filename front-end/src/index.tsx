@@ -22,12 +22,13 @@ ReactDOM.render(
   <React.StrictMode>
     <GlobalStyle />
     <StaffProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home>Engineering Test</Home>} />
-          <Route path="staff/*" element={<StaffApp />} />
-        </Routes>
-      </BrowserRouter>
+
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home>Engineering Test</Home>} />
+        <Route path="staff/*" element={<StaffApp />} />
+      </Routes>
+    </BrowserRouter>
     </StaffProvider>
   </React.StrictMode>,
   document.getElementById("root")

@@ -33,6 +33,10 @@ export const stateReducer = (state, action) => {
       const newStudent = action.payload
       const existingStudentRolls = state.updatedStudentRolls
 
+      console.log(state, "from roll update reducer state")
+      console.log(existingStudentRolls, "from roll update reducer existingRolls")
+      console.log(newStudent, "from roll update reducer newStudent")
+
       const latestChanges = isStudentUpdated(existingStudentRolls, newStudent)
         ? existingStudentRolls.map((studentObj) => (studentObj.id === newStudent.id ? { ...newStudent } : { ...studentObj }))
         : existingStudentRolls.concat(action.payload)
@@ -48,6 +52,7 @@ export const stateReducer = (state, action) => {
       }
 
     case "FILTER_STUDENT_ROLE":
+      console.log(action.payload, "from filter reducer")
       return {
         ...state,
         filterType: action.payload,
